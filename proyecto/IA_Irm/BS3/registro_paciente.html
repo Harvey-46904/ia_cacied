@@ -1,0 +1,110 @@
+{% extends 'paciente.html' %}
+{% block cuerpo%}
+
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Registro paciente</h4>
+                    </div>
+                    <div class="content">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_tipo_documento">Tipo documento:</label>
+                                        <select class="form-control" id="id_tipo_documento" name="tipo_documento">
+                                            <option>Cedula de Ciudadania</option>
+                                            <option>Tarjeta de Identidad</option>
+                                            <option>Pasaporte</option>
+
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="id_no_documento">No documento:</label><input type="text"
+                                            class="form-control" name="no_documento" maxlength="100" required=""
+                                            id="id_no_documento">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_nombres">Nombres:</label><input class="form-control" type="text"
+                                            name="nombres" maxlength="100" required="" id="id_nombres">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_apellidos">Apellidos:</label><input class="form-control"
+                                            type="text" name="apellidos" maxlength="100" required="" id="id_apellidos">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_edad">Edad:</label><input class="form-control" type="text"
+                                            name="edad" maxlength="50" required="" id="id_edad">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_telefono">Telefono:</label><input class="form-control"
+                                            type="text" name="telefono" maxlength="100" required="" id="id_telefono">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+
+                            <button type="submit" class="btn btn-info btn-fill pull-right">Registrar</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-user">
+                    <div class="image">
+                        <img src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
+                            alt="..." />
+                    </div>
+                    <div class="content">
+                        <div class="author">
+                            <a href="#">
+                                <img class="avatar border-gray"
+                                    src="data:image/jpeg;base64,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"
+                                    alt="..." />
+
+                                <h4 class="title">Pacientes<br />
+
+                                </h4>
+                            </a>
+                        </div>
+                        <br>
+                        <p class="description text-center"> Modulo registro de pacientes
+                        </p>
+                    </div>
+                    <hr>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock cuerpo%}

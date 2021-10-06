@@ -1,0 +1,54 @@
+{% extends 'paciente.html' %}
+{% block cuerpo%}
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Lista de pacientes</h4>
+                        <p class="category">los pacientes podran ser agendado a una cita </p>
+                    </div>
+                    <div class="content table-responsive table-full-width">
+                        <table class="table table-hover table-striped">
+                            <thead>
+                                <th>#</th>
+                                <th>tipo Documento</th>
+                                <th>No Documento</th>
+                                <th>Nombres</th>
+                                <th>Apellidos</th>
+                                <th>Edad</th>
+                                <th>Contacto</th>
+
+                                <th>Acciones</th>
+                            </thead>
+                            <tbody>
+                                {% for profesionales in profesional %}
+                                <tr>
+                                    <td>{{ profesionales.id}}</td>
+                                    <td>{{ profesionales.tipo_documento}}</td>
+                                    <td>{{ profesionales.no_documento}}</td>
+                                    <td>{{ profesionales.nombres}}</td>
+                                    <td>{{ profesionales.apellidos}}</td>
+                                    <td>{{ profesionales.edad}}</td>
+                                    <td>{{ profesionales.telefono}}</td>
+                                    <td><button class="btn btn-primary">Accion</button></td>
+                                </tr>
+                                {% endfor%}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock cuerpo%}

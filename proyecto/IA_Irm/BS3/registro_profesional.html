@@ -1,0 +1,124 @@
+{% extends 'profesionales.html' %}
+{% block cuerpo%}
+
+
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="header">
+                        <h4 class="title">Registro Profesional</h4>
+                    </div>
+                    <div class="content">
+                        <form method="POST">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_tipo_documento">Tipo documento:</label>
+                                        <select class="form-control" id="id_tipo_documento" name="tipo_documento">
+                                            <option>Cedula de Ciudadania</option>
+                                            <option>Tarjeta de Identidad</option>
+                                            <option>Pasaporte</option>
+
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <div class="form-group">
+                                        <label for="id_no_documento">No documento:</label><input type="text"
+                                            class="form-control" name="no_documento" maxlength="100" required=""
+                                            id="id_no_documento">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_nombres">Nombres:</label><input class="form-control" type="text"
+                                            name="nombres" maxlength="100" required="" id="id_nombres">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_apellidos">Apellidos:</label><input class="form-control"
+                                            type="text" name="apellidos" maxlength="100" required="" id="id_apellidos">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_edad">Edad:</label><input class="form-control" type="text"
+                                            name="edad" maxlength="50" required="" id="id_edad">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_telefono">Telefono:</label><input class="form-control"
+                                            type="text" name="telefono" maxlength="100" required="" id="id_telefono">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_correo">Correo:</label><input class="form-control" type="email"
+                                            name="correo" maxlength="200" required="" id="id_correo">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="id_contraseña">Contraseña:</label><input class="form-control"
+                                            type="text" name="contraseña" maxlength="200" required=""
+                                            id="id_contraseña">
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+
+                            <button type="submit" class="btn btn-info btn-fill pull-right">Registrar</button>
+                            <div class="clearfix"></div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-user">
+                    <div class="image">
+                        <img src="https://ununsplash.imgix.net/photo-1431578500526-4d9613015464?fit=crop&fm=jpg&h=300&q=75&w=400"
+                            alt="..." />
+                    </div>
+                    <div class="content">
+                        <div class="author">
+                            <a href="#">
+                                <img class="avatar border-gray"
+                                    src="https://us.123rf.com/450wm/lan04ka/lan04ka1710/lan04ka171000104/88760904-doctor-en-c%C3%ADrculo-azul-sobre-fondo-blanco-m%C3%A9dico-de-ilustraci%C3%B3n-vectorial-en-estilo-plano-doctor-con.jpg?ver=6"
+                                    alt="..." />
+
+                                <h4 class="title">Profesionales<br />
+
+                                </h4>
+                            </a>
+                        </div>
+                        <br>
+                        <p class="description text-center"> Modulo registro de profionales
+                        </p>
+                    </div>
+                    <hr>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock cuerpo%}

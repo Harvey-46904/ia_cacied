@@ -1,0 +1,701 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>IA IRM</title>
+
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+  <meta name="viewport" content="width=device-width" />
+
+  <!-- Bootstrap core CSS     -->
+  <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet" />
+  <link href="{% static 'assets/css/dropzone.min.css' %}" rel="stylesheet" />
+  <!-- Animation library for notifications   -->
+  <link href="{% static 'assets/css/animate.min.css' %}" rel="stylesheet" />
+
+  <!--  Light Bootstrap Table core CSS    -->
+  <link href="{% static 'assets/css/light-bootstrap-dashboard.css' %}" rel="stylesheet" />
+
+  <!--  CSS for Demo Purpose, don't include it in your project     -->
+  <link href="{% static 'assets/css/demo.css' %}" rel="stylesheet" />
+
+  <!--     Fonts and icons     -->
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300" rel="stylesheet" type="text/css" />
+  <link href="{% static 'assets/css/pe-icon-7-stroke.css' %}" rel="stylesheet" />
+  <style>
+    #cont2 {
+      width: 50%;
+      height: 300px;
+      background-color: #ffccff;
+      float: left;
+      overflow: auto;
+    }
+  </style>
+  <script src="{% static 'assets/js/control_panel.js' %}"></script>
+
+</head>
+
+<body>
+  <div class="wrapper">
+    <div class="sidebar" data-color="blue" data-image="" style="z-index:3">
+      <!--
+
+        Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+        Tip 2: you can also add an image using data-image tag
+
+    -->
+
+      <div class="sidebar-wrapper cont1">
+        <div class="logo">
+          <a href="http://www.creative-tim.com" class="simple-text">
+            IA IRM
+          </a>
+        </div>
+
+        <ul class="nav">
+          <li class="bg-blues">
+            <a href="{% url 'profesion' %}">
+              <i class="pe-7s-user"></i>
+              <p>Control Profesionales</p>
+            </a>
+          </li>
+          <li class="bg-blues">
+            <a onclick="aparecermenu(1)">
+              <i class="pe-7s-plus"></i>
+              <p>Opciones</p>
+
+            </a>
+          </li>
+
+          <li class="bg-light menu1 " style="display: none;">
+            <a class="text-center">
+
+              <h6 class="text-dark">Subir Imagen</h6>
+              <img src="{% static 'assets/img/iconos_ia/subir.png' %}" width="80px" height="80px" alt=""
+                draggable="true" ondragstart="evdragstart(event,this)" id="e1" class="rounded mx-auto d-block" />
+            </a>
+          </li>
+          <li class="bg-light menu1" style="display: none;">
+            <a class="text-center">
+
+              <h6 class="text-dark">Abrir Diagnostico</h6>
+              <img src="{% static 'assets/img/iconos_ia/abrir.png' %}" width="80px" height="80px" alt=""
+                draggable="true" id="e2" />
+            </a>
+          </li>
+          <li class="bg-light menu1" style="display: none;">
+            <a class="text-center">
+
+              <h6 class="text-dark">Guardar Diagnostico</h6>
+              <img src="{% static 'assets/img/iconos_ia/guardar.png' %}" width="80px" height="80px" alt=""
+                draggable="true" id="e3" />
+            </a>
+          </li>
+
+          <li class="bg-blues">
+            <a onclick="aparecermenu(2)">
+              <i class="pe-7s-plus"></i>
+              <p>MINERIA DE DATOS</p>
+            </a>
+          </li>
+          <li class="bg-light menu2" style="display: none;">
+            <a class="text-center">
+
+              <h6 class="text-dark">C4.5</h6>
+              <img src="{% static 'assets/img/iconos_ia/C4.5.png' %}" width="80px" height="80px" alt="" draggable="true"
+                ondragstart="evdragstart(event,this)" id="e4" />
+            </a>
+          </li>
+
+          <li class="bg-blues">
+            <a onclick="aparecermenu(3)">
+              <i class="pe-7s-plus"></i>
+              <p>REDES NEURONALES</p>
+            </a>
+          </li>
+          <li class="bg-light menu3" style="display: none;">
+            <a class="text-center">
+
+              <h6 class="text-dark">Red Neuronal</h6>
+              <img src="{% static 'assets/img/iconos_ia/RED_NEURONAL.png' %}" width="80px" height="80px" alt=""
+                draggable="true" ondragstart="evdragstart(event,this)" id="e5" />
+            </a>
+          </li>
+
+          <li class="bg-blues">
+
+            <a onclick="aparecermenu(4)">
+              <i class="pe-7s-plus"></i>
+              <p> VISTAS</p>
+            </a>
+          </li>
+
+          <li class="bg-light menu4" style="display: none;">
+
+            <a class="text-center">
+              <h6 class="text-dark">Resultado</h6>
+              <img src="{% static 'assets/img/iconos_ia/informe.png' %}" width="80px" height="80px" alt=""
+                draggable="true" ondragstart="evdragstart(event,this)" id="e6" />
+
+
+            </a>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+    <div class="main-panel">
+      <nav class="navbar navbar-default navbar-fixed">
+        <div class="container-fluid">
+          <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navigation-example-2">
+              <span class="sr-only">Toggle navigation</span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Tablero de Control IA</a>
+          </div>
+          <div class="collapse navbar-collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+              <li>
+                <a href="">
+                  <p>Cuenta</p>
+                </a>
+              </li>
+
+              <li>
+                <a href="#">
+                  <p>Log out</p>
+                </a>
+              </li>
+              <li class="separator hidden-lg"></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <!--
+  CONTENIDO 
+  onmousemove="cordenada_mouse(event)" onmouseout="clearCoor()"
+-->
+
+
+      <button id="result" class="btn btn-primary" data-toggle="modal" data-target="#respuesta">RESULTADOS</button>
+      <div class="content bg-info" ondragover="evdragover(event)" ondrop="evdrop(event,this)" id="tablero">
+
+        <svg onmousemove="cordenada_mouse(event)" id="map" class="container" version="1.1"
+          xmlns="http://www.w3.org/2000/svg" style="position: absolute; z-index: 1;">
+
+        </svg>
+      </div>
+
+      <p id="demo"></p>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-3">nodos</div>
+          <div class="col-md-9 " id="informacion">
+
+          </div>
+        </div>
+      </div>
+      <div class="container" id="">
+        <div class="row">
+          <div class="col-md-3">Relaciones</div>
+          <div class="col-md-9 " id="relaciones">
+
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class="container-fluid">
+          <nav class="pull-left">
+            <ul>
+
+            </ul>
+          </nav>
+          <p class="copyright pull-right">
+            Tesis Irm
+          </p>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+
+  <!-- Modal s-->
+  <!-- CARGA IMAGENES-->
+  <div class="modal fade" id="m_imagen" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Carga de imagenes</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form enctype="multipart/form-data" method="POST" id="imageForm">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="exampleFormControlFile1">Cargar Imagen</label>
+              <input type="file" class="form-control-file" id="imagenes" name="image_file">
+            </div>
+
+
+          </form>
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" onclick="mensaje()" data-dismiss="modal">Guardar
+            Cambios</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- C4.5-->
+  <div class="modal fade" id="m_c45" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">C4.5</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/file-upload" method="POST">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Tasa de aprendizaje</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>0.03</option>
+                <option>0.1</option>
+                <option>0.3</option>
+                <option>1</option>
+                <option>3</option>
+                <option>10</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Activación</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>Linear</option>
+                <option>Relu</option>
+
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Regularización</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>L1</option>
+                <option>L2</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Tasa de regularización</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>0.03</option>
+                <option>0.1</option>
+                <option>0.3</option>
+                <option>1</option>
+                <option>3</option>
+                <option>10</option>
+              </select>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="mensaje()" data-dismiss="modal">Guardar
+            Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- INTELINGENCIA ARTIFICIAL-->
+  <div class="modal fade" id="ia" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Inteligencia Artificial</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="" class="" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="exampleFormControlInput1">Numero de ciclos</label>
+              <input type="number" class="form-control" id="exampleFormControlInput1">
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlInput1">Taza de Aprendizaje</label>
+              <input type="number" class="form-control" id="exampleFormControlInput1">
+            </div>
+            <div class="form-group">
+              <label for="exampleFormControlInput1">Decadencia de peso</label>
+              <input type="number" class="form-control" id="exampleFormControlInput1">
+            </div>
+
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Tipo</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>Recurrente</option>
+                <option>Autoencoders</option>
+                <option>por definir</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Capa de abandono</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>0.1</option>
+                <option>0.2</option>
+                <option>0.3</option>
+                <option>0.4</option>
+                <option>0.5</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">funciones de optimizadores</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>Adán</option>
+
+                <option>Nadam</option>
+
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">funciones de activacion</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>Capa ReLU</option>
+                <option>Capa Softmax</option>
+
+
+              </select>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="mensaje()" data-dismiss="modal">Guardar
+            Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- VISTAS-->
+  <div class="modal fade" id="vista" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Vistas</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="" class="" method="">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="exampleFormControlSelect1">Vistas</label>
+              <select class="form-control" id="exampleFormControlSelect1">
+                <option>Ambas</option>
+                <option>Capas de entrenamiento</option>
+
+                <option>Matriz de confusion</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="mensaje()" data-dismiss="modal">Guardar
+            Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- REDUCCION DE DIMENSIONALIDAD-->
+  <div class="modal fade" id="dim" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Reduccion de Dimensionalidad</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="/file-upload" class="dropzone" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label for="exampleFormControlInput1">pendiente</label>
+              <input type="email" class="form-control" id="exampleFormControlInput1">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="modal fade" id="respuesta" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Registro</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h3>Procesamiento de imagenes</h3>
+          <h2>resultados</h2>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Imagenes procesadas</label>
+            <textarea class="form-control" id="imagenes_pros" rows="5"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Capas Creadas</label>
+            <textarea class="form-control" id="capas_pros" rows="5"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Matriz de confunsión</label>
+            <br>
+            <img id="confucion" src="" width="100%" height="100%">
+          </div>
+          <div class="form-group">
+            <label for="exampleFormControlTextarea1">Capas de entrenamiento</label>
+            <br>
+            <img id="matrix" src="" width="100%" height="100%">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="mensaje()" data-dismiss="modal">Guardar
+            Cambios</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<!--   Core JS Files   -->
+<script src="{% static 'assets/js/jquery.3.2.1.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/js/jquery-ui.js' %}" type="text/javascript"></script>
+
+<script src="{% static 'assets/js/bootstrap.min.js' %}" type="text/javascript"></script>
+
+<!--  Charts Plugin -->
+<script src="{% static 'assets/js/chartist.min.js' %}"></script>
+
+<!--  Notifications Plugin    -->
+<script src="{% static 'assets/js/bootstrap-notify.js' %}"></script>
+
+<!--  Google Maps Plugin    -->
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="{% static 'assets/js/light-bootstrap-dashboard.js' %}"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<script src="{% static 'assets/js/demo.js' %}"></script>
+<script src="{% static 'assets/js/ubicacion.js' %}"></script>
+<script src="{% static 'assets/js/dropzone.min.js' %}"></script>
+
+<script src="{% static 'assets/js/llamadas.js' %}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
+<script>
+  function aparecermenu(a) {
+    desaparecer()
+    var menu = ".menu" + a
+    $(menu).show()
+  }
+  function desaparecer() {
+    $(".menu1").hide()
+    $(".menu2").hide()
+    $(".menu3").hide()
+    $(".menu4").hide()
+  }
+
+  function cargar_imagen() {
+
+  }
+
+  document.getElementById("imageForm").onclick = function () {
+    var forms = document.getElementById("imageForm")
+    console.log("carga");
+    $.ajax(
+      {
+        url: '/file-upload',
+        method: 'POST',
+        data: new FormData(forms),
+        processData: false,
+        contentType: false,
+      })
+  };
+
+  function mensaje() {
+    console.log("prewparando carga");
+    var forms = $('#carga_imagenes').serializeArray()
+    var forms = document.getElementById("imageForm")
+    console.log(forms);
+    $.ajax({
+
+      url: '/file-upload',
+      method: 'POST',
+      data: new FormData(forms),
+      processData: false,
+      contentType: false,
+      success: function (result) {
+        console.log(result);
+      }
+    })
+
+
+
+
+
+
+    Swal.fire({
+      title: 'Datos Cargados Correctamente',
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    })
+  }
+
+
+  $(document).on('click', '#llamar_ias', function () {
+    Swal.fire({
+      title: 'Entrenando modelo por favor espere',
+      showClass: {
+        popup: 'animate__animated animate__fadeInDown'
+      },
+      hideClass: {
+        popup: 'animate__animated animate__fadeOutUp'
+      }
+    })
+    $.ajax({
+      type: "GET",
+      url: "/ia-train",
+      success: function (result) {
+
+
+
+        $('#imagenes_pros').text(result.files)
+        $('#capas_pros').text(result.informacion)
+        respuesta_imagen = result.files;
+        informacion = result.informacion;
+
+        $("#confucion").attr("src", result.confu);
+        $("#matrix").attr("src", result.matrix);
+
+        $("#result").show();
+
+        Swal.fire({
+          title: 'Entrenamiento a finalizado',
+          showClass: {
+            popup: 'animate__animated animate__fadeInDown'
+          },
+          hideClass: {
+            popup: 'animate__animated animate__fadeOutUp'
+          }
+        })
+
+      }
+    });
+  })
+
+</script>
+<script languaje="javascript">
+  $(document).ready(function () {
+    $(".draggable").mouseover(function () {
+      alert("Hola mundo");
+    });
+  });
+</script>
+<script>
+
+  $(function () {
+    $(".draggable").draggable();
+
+  });
+
+
+</script>
+
+<script type="text/javascript">
+  $("#result").hide();
+
+  let mousex = 0;
+  let mousey = 0;
+  function cordenada_mouse(event) {
+    var x = event.clientX;
+    var y = event.clientY;
+    var coor = "X: " + x + ", Y: " + y;
+
+
+    mousex = x;
+    mousey = y;
+
+
+    if (relacion == 1) {
+      console.log("entro en 1 active animacion");
+      const shortLine = document.getElementById('estandar')
+      shortLine.setAttribute('x2', mousex - 288)
+      shortLine.setAttribute('y2', mousey - 26)
+    }
+
+    document.getElementById("demo").innerHTML = coor;
+  }
+
+  function clearCoor() {
+    document.getElementById("demo").innerHTML = "";
+  }
+  function mirar_div(a) {
+    let id_formt = "#" + a;
+
+    var coordenadas = $(id_formt).position();
+    let r = pila_divs.find(conector => conector.id === a).cordenada = "Y: " + coordenadas.top + " X: " + coordenadas.left
+    r = pila_divs.find(conector => conector.id === a)
+    document.getElementById("informacion").innerHTML = JSON.stringify(pila_divs);
+  }
+  function myFunction(b) {
+    alert("hello, i am " + b + "and my positio is " + mirar_div(b));
+  }
+</script>
+
+</html>
