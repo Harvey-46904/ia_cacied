@@ -22,6 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ia', inicios, name='index'),
+    path('ia-control', panel, name='panel'),
+
     path('menu', modulos, name='menu'),
     path('file-upload', imagenes, name='img'),
     path('files', check_folders, name='file'),
@@ -32,7 +34,7 @@ urlpatterns = [
     path('profesional', vista_profesional, name='profesion'),
     path('profesional_registro', registro_profesional, name='profesion_registro'),
     path('profesional_lista', lista_profesionales, name='listar_registro'),
-
+    path('cambio', cambiar_parametros, name="cambio"),
 
     path('pacientes', vista_paciente, name='paciente'),
     path('paciente_registro', registro_paciente, name='paciente_registro'),
@@ -42,7 +44,9 @@ urlpatterns = [
     path('sesion', logins, name='sesion'),
     path('ia-train', principal_entrenamiento, name='ias'),
     path('cita/<int:id>', analizar, name='show'),
-    path('imgs/<str:foto>', mostrar_imagen, name='imgs')
+    path('export/', export_pdf, name="export-pdf"),
+    path('imgs/<str:foto>', mostrar_imagen, name='imgs'),
+    path('upload', file_upload, name='upload-file'),
 
 
 ]

@@ -3,7 +3,7 @@ import glob
 import base64
 import urllib
 import io
-from django.http import JsonResponse
+from django.http import JsonResponse, request
 from django.shortcuts import render
 from django.http import response
 import matplotlib.image as mpimg
@@ -36,11 +36,29 @@ from IPython.display import display, clear_output
 from warnings import filterwarnings
 from keras.applications.vgg19 import VGG19, preprocess_input
 import glob
+
+from datetime import datetime
+from django.http import FileResponse
+from reportlab.pdfgen import canvas
+from easy_pdf.rendering import render_to_pdf_response
 # vistas de la paginas
+import seaborn as sns
+import urllib
+
+import base64
+
+from django.http import HttpResponse, JsonResponse
+
+
+epocas = 0
+
+
+def panel(request):
+    return render(request, 'panel_control.html')
 
 
 def inicios(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'panel_control.html')
 
 
 def login(request):
@@ -197,27 +215,14 @@ def cargar_modelo(url):
     return p
 
 
-def analizar(request, id):
-    persona = Paciente.objects.get(id=id)
-    resonancia = Cita.objects.get(id=persona.id)
-    url = "./"+resonancia.resonancia.url
-    prediccion = cargar_modelo(url)
-    #uri = mostrar_imagen(url)
+pdfs = None
 
-    tumor = {
-        0: "Glioma Tumor",
-        1: "No Tumor",
-        2: "Meningioma Tumor",
-        3: "Pituitary Tumor"
-    }
 
-    contexto = {
-        'profesional': persona,
-        'resonancia': resonancia,
-        'prediccion': prediccion
-    }
+def export_pdf(request):
+    template = 'report-pdf.html'
 
-    return render(request, 'cita_sola.html', contexto)
+    context = pdfs
+    return render_to_pdf_response(request, template, context)
 
 
 def modulos(request):
@@ -226,7 +231,7 @@ def modulos(request):
 
 def imagenes(request):
     form = ImageForm(request.POST, request.FILES)
-
+    print(form)
     form.save()
     return JsonResponse({'you name': "carga correcta"})
 
@@ -296,6 +301,16 @@ def check_folders(request):
     '''retornamos la direccion de la carpeta'''
     return JsonResponse(
         {'files': list(os.listdir(path + "/Training"))})
+
+
+def cambiar_parametros(request):
+    global epocas
+    if request.method == "POST":
+        epocas_post = request.POST.get("epocas")
+        epocas = int(epocas_post)
+
+        return JsonResponse({'data': epocas_post})
+    return JsonResponse({'data': "none"})
 
 
 def pruebas(request):
@@ -712,7 +727,7 @@ ya es un modelo entrenado para realizar pruebas
 
 def entrenar():
     (tensorboard, checkpoint, reduce_lr) = preparar_modelo()
-    history = model.fit(X_train, y_train, validation_split=0.1, epochs=12, verbose=1, batch_size=32,
+    history = model.fit(X_train, y_train, validation_split=0.1, epochs=epocas, verbose=1, batch_size=32,
                         callbacks=[tensorboard, checkpoint, reduce_lr])
     return history
 
@@ -731,7 +746,65 @@ Entonces, con argmax, puedo averiguar el índice asociado
 '''
 
 
+def matrizvs(history):
+    filterwarnings('ignore')
+
+    epochs = [i for i in range(epocas)]
+    fig, ax = plt.subplots(1, 2, figsize=(14, 7))
+    train_acc = history.history['accuracy']
+    train_loss = history.history['loss']
+    val_acc = history.history['val_accuracy']
+    val_loss = history.history['val_loss']
+
+    fig.text(s='Epochs vs. Training and Validation Accuracy/Loss', size=18, fontweight='bold',
+             fontname='monospace', color=colors_dark[1], y=1, x=0.28, alpha=0.8)
+
+    sns.despine()
+    ax[0].plot(epochs, train_acc, marker='o', markerfacecolor=colors_green[2], color=colors_green[3],
+               label='Training Accuracy')
+    ax[0].plot(epochs, val_acc, marker='o', markerfacecolor=colors_red[2], color=colors_red[3],
+               label='Validation Accuracy')
+    ax[0].legend(frameon=False)
+    ax[0].set_xlabel('Epochs')
+    ax[0].set_ylabel('Accuracy')
+
+    sns.despine()
+    ax[1].plot(epochs, train_loss, marker='o', markerfacecolor=colors_green[2], color=colors_green[3],
+               label='Training Loss')
+    ax[1].plot(epochs, val_loss, marker='o', markerfacecolor=colors_red[2], color=colors_red[3],
+               label='Validation Loss')
+    ax[1].legend(frameon=False)
+    ax[1].set_xlabel('Epochs')
+    ax[1].set_ylabel('Training & Validation Loss')
+
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = urllib.parse.quote(string)
+    return uri
+
+
+def confus():
+    pred = model.predict(X_test)
+    pred = np.argmax(pred, axis=1)
+    y_test_new = np.argmax(y_test, axis=1)
+    fig, ax = plt.subplots(1, 1, figsize=(14, 7))
+    sns.heatmap(confusion_matrix(y_test_new, pred), ax=ax, xticklabels=labels, yticklabels=labels, annot=True,
+                cmap=colors_green[::-1], alpha=0.7, linewidths=2, linecolor=colors_dark[3])
+    fig.text(s='Heatmap of the Confusion Matrix', size=18, fontweight='bold',
+             fontname='monospace', color=colors_dark[1], y=0.92, x=0.28, alpha=0.8)
+
+    buf = io.BytesIO()
+    fig.savefig(buf, format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = urllib.parse.quote(string)
+    return uri
+
+
 def principal_entrenamiento(request):
+
     carga_de_imagenes()
     convertir_imagenes()
     muestreo_imagenes()
@@ -741,12 +814,33 @@ def principal_entrenamiento(request):
     entrenando_labels_prueba()
     descarga_modelo()
     informacion = instructor_modelo()
+    his = entrenar()
+    accuracy = his.history['accuracy']
+    loss = his.history['loss']
+    val_accuracy = his.history['val_accuracy']
+    val_loss = his.history['val_loss']
+    uri = matrizvs(his)
+    cunfu = confus()
+    return JsonResponse({
+        # 'files': log_carga_imagenes,
+        # 'informacion': informacion,
+        "confu": "data:image/png;base64,"+cunfu,
+        "matrix": "data:image/png;base64,"+uri,
+        "accuracy": accuracy[-1],
+        "loss": loss[-1],
+        "val_accuracy": val_accuracy[-1],
+        "val_loss": val_loss[-1]
+    })
 
     return JsonResponse({
-        'files': log_carga_imagenes,
-        'informacion': informacion,
-        "confu": "http://127.0.0.1:8000/static/assets/img/confu.png",
-        "matrix": "http://127.0.0.1:8000/static/assets/img/matrices.png"
+        # 'files': log_carga_imagenes,
+        # 'informacion': informacion,
+        "confu": "data:image/png;base64,",
+        "matrix": "http://127.0.0.1:8000/static/assets/img/matrices.png",
+        "accuracy": 88,
+        "loss": 2,
+        "val_accuracy": 3,
+        "val_loss": 4
     })
 # =================Segmentacion===================
 
@@ -835,4 +929,96 @@ def mostrar_imagen(request, foto):
     string = base64.b64encode(buf.read())
     uri = urllib.parse.quote(string)
 
-    return JsonResponse({'data': uri})
+    return uri
+
+
+def nuevo_img_color(ruta):
+    image = cv2.imread(ruta)
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    x,y,w,h = cv2.boundingRect(thresh)
+    ROI = image[y:y+h, x:x+w]    
+    hsv = cv2.cvtColor(ROI, cv2.COLOR_BGR2HSV)
+    lower = np.array([0, 0, 152])
+    upper = np.array([179, 255, 255])
+    mask = cv2.inRange(hsv, lower, upper)
+    x, y, w, h = 0, 0, ROI.shape[1]//2, ROI.shape[0]
+    left = mask[y:y+h, x:x+w]
+    right = mask[y:y+h, x+w:x+w+w]
+    left_pixels = cv2.countNonZero(left)
+    right_pixels = cv2.countNonZero(right)
+    print('Left pixels:', left_pixels)
+    print('Right pixels:', right_pixels)
+    retval, buffer_img= cv2.imencode('.png', mask)
+    base64_img = base64.b64encode(buffer_img).decode("utf-8")
+
+    retval1, buffer_img1= cv2.imencode('.png', thresh)
+    base64_img1 = base64.b64encode(buffer_img1).decode("utf-8")
+    mas="data:image/png;base64,"+base64_img
+    ther="data:image/png;base64,"+base64_img1
+    return (mas,ther)
+
+    
+
+
+def analizar(request, id):
+    global pdfs
+    persona = Paciente.objects.get(id=id)
+
+    resonancia = Cita.objects.get(id=persona.id)
+    profesiona = profesional.objects.get(id=resonancia.id_profesional_id)
+    url = "./"+resonancia.resonancia.url
+    (mas,ther)=nuevo_img_color(url)
+    prediccion = cargar_modelo(url)
+    #uri = mostrar_imagen(request, url)
+    now = datetime.now()
+    '''image = cStringIO.StringIO(urllib.urlopen(url).read())
+    bases64 = 'data:image/jpg;base64,' + base64.b64encode(image.read())
+    '''
+    tumor = {
+        0: "Glioma Tumor",
+        1: "No Tumor",
+        2: "Meningioma Tumor",
+        3: "Pituitary Tumor"
+    }
+
+    contexto = {
+        # 'uri': uri,
+        'profesional': persona,
+        'resonancia': resonancia,
+        'persona': profesiona,
+        'fecha': now,
+        'mask':mas,
+        'ther':ther,
+        'prediccion':prediccion
+        # 'prediccion': prediccion
+    }
+    pdfs = contexto
+
+    return render(request, 'modelo_nuevo.html', contexto)
+
+    # return render(request, 'cita_sola.html', contexto)
+
+
+def file_upload(request):
+    if request.method == "POST":
+        etiqueta = request.POST.get("lables")
+        print(etiqueta)
+        if etiqueta == "Glioma tumor":
+            my_file = request.FILES.get('file')
+            glioma.objects.create(upload=my_file)
+            return HttpResponse('')
+        if etiqueta == "Meningioma tumor":
+            my_file = request.FILES.get('file')
+            meningioma.objects.create(upload=my_file)
+            return HttpResponse('')
+        if etiqueta == "Pituitary tumor":
+            my_file = request.FILES.get('file')
+            pituitary.objects.create(upload=my_file)
+            return HttpResponse('')
+        if etiqueta == "No tumor":
+            my_file = request.FILES.get('file')
+            no_tumor.objects.create(upload=my_file)
+            return HttpResponse('')
+
+    return JsonResponse({'post': 'false'})

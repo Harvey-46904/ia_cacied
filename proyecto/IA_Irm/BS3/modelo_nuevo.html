@@ -1,0 +1,95 @@
+{% extends 'paciente.html' %}
+{% block cuerpo%}
+{% load static%}
+<div class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <img src="{% static 'assets/img/dirma.jpeg' %}" class="rounded " alt="...">
+            </div>
+            <div class="col-md-5 text-right px-3 ">
+                <img src="{% static 'assets/img/logo-institucion-universitaria-cesmag.png' %}" class="rounded "
+                    alt="..." width="100px">
+            </div>
+        </div>
+
+        <div class="row py-5">
+            <div class="col-md-12"><b>Fecha: {{fecha}}</b> </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center  bg-barra text-white">
+                <h4>DATOS DEL PACIENTE</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 "><b>Nombre:</b> {{ profesional.nombres}} {{profesional.apellidos}}</div>
+            <div class="col-md-6"><b>Identificacion:</b> {{ profesional.no_documento}}</div>
+            <div class="col-md-6"><b>Edad: </b> {{ profesional.edad}}</div>
+            <div class="col-md-6"><b>Telefono: </b> {{ profesional.telefono}}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 py-2 my-2 text-center bg-barra text-white">
+                <h4>POSIBLE DIAGNÓSTICO</h4>
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-md-6 text-center">
+                <img src="{{ resonancia.resonancia.url}}" style=" width: 400px;
+                height: 400px;" class="rounded   py-3" alt="...">
+            </div>
+            <div class="col-md-6">
+                <div class="row py-3 text-center bg-blues text-white my-3">
+                    <h4>Enfermedad Diagnosticada </h4>
+                </div>
+                <div class="row">
+                    <h3><b>{{prediccion}}</b></h3>
+                </div>
+                <div class=" row py-3 bg-blues text-white text-center">
+                    <h4>Tenga en cuenta la siguiente información</h4>
+                </div>
+                <div class="row">El diagnóstico arrojado por DIRMIA puede llegar a ser confuso o en su caso erróneo, por
+                    lo que se recomienda que sea utilizado únicamente como apoyo al diagnostico profesional.
+                    DIRMIA no se hace responsable del mal uso de esta herramienta.</div>
+            </div>
+        </div>
+        <div class="row py-4 text-center">
+            <div class="col-md-4">
+                <img src="{{ resonancia.resonancia.url}}" style=" width: 150px;
+                height: 150px;" class="rounded   py-3" alt="...">
+                <br>
+                <b>Segmentación 1</b>
+            </div>
+            <div class="col-md-4"><img src="{{mask}}" style=" width: 150px;
+                height: 150px;" class="rounded  py-3" alt="...">
+                <br>
+                <b>Segmentación 2</b>
+            </div>
+            <div class="col-md-4"><img src="{{ther}}" style=" width: 150px;
+                height: 150px;" class="rounded   py-3" alt="...">
+                <br>
+                <b>Segmentación 3</b>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 py-2 my-2 bg-barra text-white text-center">
+                <h4>DATOS DEL PROFESIONAL</h4>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6"><b>Nombre: </b> {{ persona.nombres}} {{persona.apellidos}} </div>
+            <div class="col-md-6"><b>Identificacion: </b> {{ persona.no_documento}}</div>
+        </div>
+        <div class="row py-4">
+            <div class="col-md-12 py-4 text-center ">firma</div>
+        </div>
+        <div class="row py-4">
+            <div class="col-md-12 text-center ">
+                <input type="button" class="btn btn-primary" onclick='generar_pdf()' value="Descargar Reporte" />
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock cuerpo%}

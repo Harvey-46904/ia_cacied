@@ -46,3 +46,38 @@ class Cita(models.Model):
 
 class ImageUpload(models.Model):
     image_file = models.ImageField(upload_to="resonancias")
+
+
+class Doc(models.Model):
+    upload = models.ImageField(upload_to='uploadedimages/')
+
+    def __str__(self):
+        return str(self.pk)
+
+
+class glioma(models.Model):
+    upload = models.ImageField(upload_to='gliomoa/')
+
+    def __str__(self):
+        return str(self.pk)
+
+
+class meningioma(models.Model):
+    upload = models.ImageField(upload_to='meningioma/')
+
+    def __str__(self):
+        return str(self.pk)
+
+
+class no_tumor(models.Model):
+    upload = models.ImageField(upload_to='no_tumor/')
+
+    def __str__(self):
+        return str(self.pk)
+
+
+class pituitary(models.Model):
+    upload = models.ImageField(upload_to='pituitary/')
+
+    def __str__(self):
+        return str(self.pk)

@@ -58,7 +58,7 @@ function setModal(id) {
       break;
   }
 }
-
+let bloque;
 let tablero;
 let contador1 = 0;
 let nombrese = ["Cargar Datos", "C4.5", "Red Neuronal", "Vistas"]
@@ -67,6 +67,8 @@ function evdrop(ev, el) {
     "id": id,
     "cordenada": 0
   }
+
+  $("#msg_model").hide();
   tablero=el;
   //ev=el evento; el=receptor de soltado
   ev.stopPropagation(); //impedir otras acciones
@@ -80,7 +82,7 @@ function evdrop(ev, el) {
   mielem2.setAttribute("draggable", "false"); //impedimos que el nuevo elemento pueda volver a arrastrarse
   //titulo
   let titulo = document.createElement("h5");
-  titulo.innerHTML = nombrese[contador1];
+  titulo.innerHTML = "EfficientNetB0"
 
   contador1++;
   //crear div
@@ -89,7 +91,7 @@ function evdrop(ev, el) {
   pila_divs.push(midiv)
   divs.setAttribute("id", id);
 
-  divs.className = " bg-blues text-center border border-secondary draggable"
+  divs.className = " bg-cuadros text-center border border-secondary draggable"
   divs.style.cssText = "width:150px;height:180px; margin-bottom: 35px;border-radius: 20px;position: relative; z-index: 2;"
   divs.setAttribute("onmouseover", "$( function() {$( '.draggable' ).draggable() ;mirar_div(" + id + ")} );");
 
@@ -108,7 +110,7 @@ function evdrop(ev, el) {
   ejectutar.innerHTML = 'E';
   ejectutar.className = "btn btn-success btn-sm px-2"
   ejectutar.setAttribute("type", "button");
-  ejectutar.setAttribute("onclick", "tensor()")
+  ejectutar.setAttribute("onclick", "show_image()")
 //crear eliminar
 var eliminar = document.createElement('button');
 eliminar.innerHTML = 'D';
@@ -137,24 +139,57 @@ ayuda.setAttribute("type", "button");
   flecha_izquierda.setAttribute("id", "l" + id);
   flecha_izquierda.setAttribute("onclick", "anidar(" + id + ")")
   flecha_izquierda.style.cssText = "position:absolute;bottom:60px;left:0px;"
-
-
+  
+  divs.appendChild(eliminar);
+  divs.appendChild(ejectutar);
+  /*
   divs.appendChild(button);
   divs.appendChild(flecha_derecha);
   divs.appendChild(flecha_izquierda);
   divs.appendChild(ejectutar);
   divs.appendChild(eliminar);
   divs.appendChild(ayuda);
-
+*/
   
   //mielem2.removeAttribute("draggable")
   //mielem2.removeAttribute("id")
   mielem2.removeAttribute("ondragstart")
-  el.appendChild(divs); //colocamos la copia en el receptor de soltado
+
+  el.appendChild(divs);
+  
+bloque=divs;
+   //colocamos la copia en el receptor de soltado
+  // crear_azar(4);
   id++;
 
 }
 function eliminar(id){
     var nested = document.getElementById(id);
     tablero.removeChild(nested);
+    $("#msg_model").show();
+    $("#msg_model_img").hide();
+}
+function show_image(){
+  $("#msg_model_img").show();
+  
+}
+function crear_azar(a){
+  for (let index = 0; index <4; index++) {
+    /*
+    var p = document.getElementById("0");
+      var l=p.cloneNode(true)
+    tablero.appendChild(l);
+    */
+  
+   var t=$("#0")[0]
+   
+   var l=t.cloneNode(true)
+   l.removeAttribute("id")
+   var h=l.childNodes[1];
+   h.innerHTML=index
+   tablero.appendChild(l);
+ 
+  }
+  
+ 
 }

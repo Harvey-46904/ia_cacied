@@ -43,26 +43,27 @@
 <body>
     <div class="wrapper">
         <div class="sidebar" data-color="blue" data-image="">
-            <div class="sidebar-wrapper cont1">
+            <div class="sidebar-wrapper cont1 bg-barra">
                 <div class="logo">
                     <a href="http://www.creative-tim.com" class="simple-text">
                         IA IRM
                     </a>
                 </div>
                 <ul class="nav">
-                    <li>
+                    <li class="bg-cuadros">
                         <a href="{% url 'profesion_registro' %}">
                             <i class="pe-7s-user"></i>
                             <p>Agregar Profesional</p>
                         </a>
                     </li>
-                    <li>
+                    <li class="bg-cuadros">
                         <a href="{% url 'listar_registro' %}">
                             <i class="pe-7s-id"></i>
                             <p>Visualizar Profesionales</p>
                         </a>
                     </li>
-                    <li>
+
+                    <li class="bg-cuadros">
                         <a href="{% url 'index' %}">
                             <i class="pe-7s-science"></i>
                             <p>Administrar Ia</p>
@@ -82,7 +83,7 @@
 
         <div class="main-panel">
             <nav class="navbar navbar-default navbar-fixed">
-                <div class="container-fluid">
+                <div class="container-fluid  bg-barra">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse"
                             data-target="#navigation-example-2">
@@ -91,7 +92,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="#">Tablero de Control Profesionales</a>
+                        <a class="navbar-brand text-white" href="#">Tablero de Control Profesionales</a>
                     </div>
                     <div class="collapse navbar-collapse">
 

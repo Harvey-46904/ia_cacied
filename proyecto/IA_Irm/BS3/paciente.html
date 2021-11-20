@@ -43,7 +43,7 @@
 <body>
     <div class="wrapper">
         <div class="sidebar" data-color="blue" data-image="">
-            <div class="sidebar-wrapper cont1">
+            <div class="sidebar-wrapper cont1 bg-barra">
                 <div class="logo">
                     <a href="http://www.creative-tim.com" class="simple-text">
                         IA IRM
@@ -175,6 +175,12 @@
 <script src="{% static 'assets/js/llamadas.js' %}"></script>
 
 <script>
+    function generar_pdf() {
+        alert("pdf generado")
+        window.open('{% url "export-pdf" %}', '_blank');
+
+    }
+
     $("#id_id_profesional").addClass("form-control");
     $("#id_id_paciente").addClass("form-control");
 

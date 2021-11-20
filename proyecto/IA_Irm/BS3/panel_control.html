@@ -1,0 +1,723 @@
+{% load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>IA IRM</title>
+
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport" />
+    <meta name="viewport" content="width=device-width" />
+
+    <!-- Bootstrap core CSS     
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet" />
+    -->
+    <link href="{% static 'assets/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link href="{% static 'assets/css/dropzone.min.css' %}" rel="stylesheet" />
+    <!-- Animation library for notifications   -->
+    <link href="{% static 'assets/css/animate.min.css' %}" rel="stylesheet" />
+
+    <!--  Light Bootstrap Table core CSS    -->
+    <link href="{% static 'assets/css/light-bootstrap-dashboard.css' %}" rel="stylesheet" />
+
+    <!--  CSS for Demo Purpose, don't include it in your project     -->
+    <link href="{% static 'assets/css/demo.css' %}" rel="stylesheet" />
+
+    <!--     Fonts and icons     -->
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="http://fonts.googleapis.com/css?family=Roboto:400,700,300" rel="stylesheet" type="text/css" />
+    <link href="{% static 'assets/css/pe-icon-7-stroke.css' %}" rel="stylesheet" />
+    <style>
+        #cont2 {
+            width: 50%;
+            height: 300px;
+            background-color: #ffccff;
+            float: left;
+            overflow: auto;
+        }
+
+        .center {
+            margin: 0 auto !important;
+            /* I have added the !important attribute just for debugging, you can remove it. */
+        }
+
+        .flex {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Optional */
+        }
+    </style>
+
+
+</head>
+
+<body class="bg-canvas">
+    <div class="wrapper ">
+        <div class="sidebar" data-color="blue" data-image="" style="z-index:3">
+            <!--
+
+        Tip 1: you can change the color of the sidebar using: data-color="blue | azure | green | orange | red | purple"
+        Tip 2: you can also add an image using data-image tag
+
+    -->
+
+            <div class="sidebar-wrapper cont1 bg-barra">
+                <div class="logo">
+                    <a href="http://www.creative-tim.com" class="simple-text">
+                        IA IRM
+                    </a>
+                </div>
+
+                <ul class="nav ">
+                    <li class="bg-cuadros">
+                        <a href="{% url 'profesion' %}">
+                            <i class="pe-7s-user"></i>
+                            <p>Control Profesionales</p>
+                        </a>
+                    </li>
+
+                    <li class="bg-cuadros">
+                        <a onclick="aparecerinfo(1)">
+                            <i class="pe-7s-user"></i>
+                            <p>Datos</p>
+                        </a>
+                    </li>
+                    <li class="bg-cuadros">
+                        <a onclick="aparecerinfo(2)">
+                            <i class="pe-7s-user"></i>
+                            <p>Modelo</p>
+                        </a>
+                    </li>
+                    <li class="bg-light menu3" style="display: none;">
+                        <a class="text-center">
+
+                            <h6 class="text-dark">EfficientNetB0</h6>
+                            <img src="{% static 'assets/img/iconos_ia/RED_NEURONAL.png' %}" width="80px" height="80px"
+                                alt="" draggable="true" ondragstart="evdragstart(event,this)" id="e5" />
+                        </a>
+                    </li>
+                    <li class="bg-cuadros">
+                        <a onclick="aparecerinfo(3)">
+                            <i class="pe-7s-user"></i>
+                            <p>Hiperparámetro</p>
+                        </a>
+                    </li>
+                    <li class="bg-cuadros">
+                        <a onclick="aparecerinfo(4)">
+                            <i class="pe-7s-user"></i>
+                            <p>Entrenamiento</p>
+                        </a>
+                    </li>
+                    <li class="bg-cuadros">
+                        <a onclick="aparecerinfo(5)">
+                            <i class="pe-7s-user"></i>
+                            <p>Resultados</p>
+                        </a>
+                    </li>
+
+
+
+
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="main-panel ">
+            <nav class="navbar navbar-default navbar-fixed">
+                <div class="container-fluid bg-barra">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse"
+                            data-target="#navigation-example-2">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand text-white" href="#">Tablero de Control IA</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li>
+                                <a href="">
+                                    <p>Cuenta</p>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="#">
+                                    <p>Log out</p>
+                                </a>
+                            </li>
+                            <li class="separator hidden-lg"></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <!--
+  CONTENIDO 
+  onmousemove="cordenada_mouse(event)" onmouseout="clearCoor()"
+-->
+
+
+
+            <div style="display: none;" class="content bg-info" ondragover="evdragover(event)"
+                ondrop="evdrop(event,this)" id="tablero">
+                <svg onmousemove="cordenada_mouse(event)" id="map" class="container" version="1.1"
+                    xmlns="http://www.w3.org/2000/svg" style="position: absolute; z-index: 1;">
+                </svg>
+            </div>
+            <div class="content bg-canvas  " ondragover="evdragover(event)" ondrop="evdrop(event,this)" id="datos">
+
+                <div class=" bg-puro   center-block text-center ">
+                    <h3 class="mb-5 text-center"><b>Formulario de carga de datos</b></h3>
+                    <!-- 
+
+
+                    <form enctype="multipart/form-data" id="imageForm" class="text-center flex ">
+                        {% csrf_token %}
+
+                        <div class="form-group py-4 ">
+                            <label for="exampleFormControlFile1">Cargar Imagen</label>
+                            <input type="file" class="form-control-file center py-4" id="imagenes" name="image_file"
+                                multiple>
+                        </div>
+
+                    </form>-->
+                    <form action="upload" method="POST" class="dropzone">
+                        {%csrf_token%}
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Seleccione Etiqueta a Entrenar</label>
+                            <select class="form-control" id="lables" name="lables">
+                                <option>Glioma tumor</option>
+                                <option>Meningioma tumor</option>
+                                <option>Pituitary tumor</option>
+                                <option>No tumor</option>
+
+                            </select>
+                        </div>
+                        <div class="fallback" style="display: none;">
+                            <input name="file" type="file" multiple />
+                        </div>
+                    </form>
+
+                    <br>
+                    <button type="submit" class="btn btn-primary  " onclick="eliminar_imagenes()">Agregar Nuevas
+                        Imagenes</button>
+                </div>
+
+            </div>
+            <div style="display: none;" class="content bg-canvas" id="modelo">
+
+                <div class=" bg-puro   center-block text-center ">
+                    <h3 class="mb-5 text-center"><b>Modelo</b></h3>
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-5"></div>
+                            <div style="height: 200px;" class="col-md-2  border border-secondary"
+                                ondragover="evdragover(event)" ondrop="evdrop(event,this)">
+                                <h3 id="msg_model">arrastre modelo aqui</h3>
+                            </div>
+                        </div>
+                        <div class="row " style="display: none;" id="msg_model_img">
+                            <div class="col-md-12">
+                                <h3>EfficientNetB0</h3>
+                                <img src="{% static 'assets/img/model.png' %}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: none;" class="content bg-canvas" ondragover="evdragover(event)"
+                ondrop="evdrop(event,this)" id="hiper">
+                <div class=" bg-puro   center-block text-center ">
+                    <h3 class="mb-5 text-center"><b>Formulario Hiper Parametros</b></h3>
+                    <form id="hipersp">
+                        {% csrf_token %}
+
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">
+                                Número de épocas</label>
+                            <input type="number" class="form-control" id="epocas" name="epocas" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">
+                                Tamaño del lote</label>
+                            <input type="number" class="form-control" id="lote" name="lote" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">
+                                función de pérdida</label>
+                            <select class="form-control" id="perdida" name="perdida">
+                                <option>categorical_crossentropy</option>
+                                <option>binary_crossentropy</option>
+                                <option>sparse_categorical_crossentropy</option>
+                                <option>poisson</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">
+
+                                optimizador</label>
+                            <select class="form-control" id="optimizar" name="optimizar">
+                                <option>Adam</option>
+                                <option>Adadelta</option>
+                                <option>Adagrad</option>
+                                <option>Adamax</option>
+
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">
+                                División de validación</label>
+                            <input type="number" class="form-control" id="divicion" name="divicion" value="0">
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="guardar_parametro()">Guardar
+                            Cambios</button>
+
+
+                    </form>
+                </div>
+            </div>
+            <div class="content bg-canvas" style="display: none;" ondragover="evdragover(event)"
+                ondrop="evdrop(event,this)" id="entrenar">
+                <div class="   center-block text-center ">
+                    <h3 class="mb-5 text-center"><b>Entrenamiento</b></h3>
+                    <div class="container-fluid" id="iniciar">
+                        <div class="row ">
+                            <div class=" text-center col-md-12">
+                                <button type="button" class="btn btn-danger"
+                                    onclick="iniciar_entrenamiento()">Iniciar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid  " id="entrenando" style="display: none;">
+                        <div class="row py-4 ">
+                            <div class="col-md-1 mx-5"></div>
+                            <div class=" text-center col-md-3 mx-3  bg-puro border border-secondary ">
+                                <h4><b>Épocas</b></h4>
+                                <hr>
+                                <h3 id="val_epoca">valor</h3>
+                            </div>
+                            <div class=" text-center col-md-3 mx-3  bg-puro border border-secondary">
+                                <h4><b>Tiempo</b></h4>
+                                <hr>
+                                <h3 id="screen">valor</h3>
+                            </div>
+                            <div class=" text-center col-md-3 mx-3  bg-puro border border-secondary">
+                                <h4><b>Loss</b></h4>
+                                <hr>
+                                <h3 id="Loss">valor</h3>
+                            </div>
+                            <div class="col-md-1 mx-5"></div>
+                        </div>
+                        <br>
+
+                        <br>
+                        <div class="row    py-4">
+                            <div class="col-md-1 mx-5"></div>
+                            <div class=" text-center col-md-3 mx-3 bg-puro border border-secondary">
+                                <h4><b>Val_loss</b></h4>
+                                <hr>
+                                <h3 id="Val_loss">valor</h3>
+                            </div>
+                            <div class=" text-center col-md-3 mx-3  bg-puro border border-secondary">
+                                <h4><b>Val_accuracy</b></h4>
+                                <hr>
+                                <h3 id="Val_accuracy">valor</h3>
+                            </div>
+                            <div class=" text-center col-md-3 mx-3 bg-puro border border-secondary">
+                                <h4><b>Accuracy</b></h4>
+                                <hr>
+                                <h3 id="Accuracy">valor</h3>
+                            </div>
+                            <div class="col-md-1 mx-5"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: none;" class="content bg-canvas" ondragover="evdragover(event)"
+                ondrop="evdrop(event,this)" id="resultados">
+                <div class=" bg-puro   center-block text-center " style="display: none;" id="first_img">
+                    <h3 class="mb-5 text-center"><b>Resultados</b></h3>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Capas de entrenamiento</label>
+                        <br>
+                        <img id="matrix" src="" width="80%" height="80%">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Matriz de confunsión</label>
+                        <br>
+                        <img id="confucion" src="" width="80%" height="80%">
+                    </div>
+                </div>
+                <div class=" bg-puro   center-block text-center " id="ffs">
+                    <h3 class="mb-5 text-center"><b>Resultados</b></h3>
+                    <h4> Resultados aun no disponibles</h4>
+                </div>
+            </div>
+
+            <footer class="footer" style="
+            border-top-width: 0px;
+        ">
+                <div class="container-fluid bg-canvas">
+                    <nav class="pull-left">
+                        <ul>
+
+                        </ul>
+                    </nav>
+                    <p class="copyright pull-right">
+                        Tesis Irm
+                    </p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+
+    <!-- Modal s-->
+
+
+
+
+
+</body>
+
+<!--   Core JS Files   -->
+<script src="{% static 'assets/js/jquery.3.2.1.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/js/jquery-ui.js' %}" type="text/javascript"></script>
+<script src="{% static 'assets/js/control_panel.js' %}"></script>
+<script src="{% static 'assets/js/bootstrap.min.js' %}" type="text/javascript"></script>
+
+<!--  Charts Plugin -->
+<script src="{% static 'assets/js/chartist.min.js' %}"></script>
+
+<!--  Notifications Plugin    -->
+<script src="{% static 'assets/js/bootstrap-notify.js' %}"></script>
+
+<!--  Google Maps Plugin    -->
+
+<!-- Light Bootstrap Table Core javascript and methods for Demo purpose -->
+<script src="{% static 'assets/js/light-bootstrap-dashboard.js' %}"></script>
+
+<!-- Light Bootstrap Table DEMO methods, don't include it in your project! -->
+<script src="{% static 'assets/js/demo.js' %}"></script>
+<script src="{% static 'assets/js/ubicacion.js' %}"></script>
+<script src="{% static 'assets/js/dropzone.min.js' %}"></script>
+
+<script src="{% static 'assets/js/llamadas.js' %}"></script>
+<script src="{% static 'assets/js/script_panel.js' %}"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.5/dist/sweetalert2.all.min.js"></script>
+<script>
+    window.onload = function () {
+
+    }
+
+
+
+    function aparecermenu(a) {
+        desaparecer()
+        var menu = ".menu" + a
+        $(menu).show()
+    }
+    function desaparecer() {
+        $(".menu1").hide()
+        $(".menu2").hide()
+        $(".menu3").hide()
+        $(".menu4").hide()
+    }
+
+    function cargar_imagen() {
+
+    }
+
+    document.getElementById("imageForm").onclick = function () {
+        var forms = document.getElementById("imageForm")
+        console.log("carga");
+        $.ajax(
+            {
+                url: '/file-upload',
+                method: 'POST',
+                data: new FormData(forms),
+                processData: false,
+                contentType: false,
+            })
+    };
+
+    function mensaje() {
+        console.log("prewparando carga");
+        var forms = $('#carga_imagenes').serializeArray()
+        var forms = document.getElementById("imageForm")
+        console.log(forms);
+        $.ajax({
+
+            url: '/file-upload',
+            method: 'POST',
+            data: new FormData(forms),
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                console.log(result);
+            }
+        })
+    }
+    function guardar_parametro() {
+        Swal.fire({
+            title: 'Parametros Guardados Exitosamente',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        })
+        var forms = $('#hipersp').serializeArray()
+        var forms = document.getElementById("hipersp")
+        console.log(forms);
+
+        $.ajax({
+
+            url: 'cambio',
+            method: 'POST',
+            data: new FormData(forms),
+            processData: false,
+            contentType: false,
+            success: function (result) {
+                console.log(result);
+            }
+        })
+
+    }
+
+
+    $(document).on('click', '#llamar_ias', function () {
+        Swal.fire({
+            title: 'Entrenando modelo por favor espere',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        })
+        $.ajax({
+            type: "GET",
+            url: "/ia-train",
+            success: function (result) {
+
+
+
+                $('#imagenes_pros').text(result.files)
+                $('#capas_pros').text(result.informacion)
+                respuesta_imagen = result.files;
+                informacion = result.informacion;
+
+                $("#confucion").attr("src", result.confu);
+                $("#matrix").attr("src", result.matrix);
+
+                $("#result").show();
+
+                Swal.fire({
+                    title: 'Entrenamiento a finalizado',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    }
+                })
+
+            }
+        });
+    })
+
+</script>
+<script languaje="javascript">
+    $(document).ready(function () {
+        $(".draggable").mouseover(function () {
+            alert("Hola mundo");
+        });
+    });
+</script>
+<script>
+
+    $(function () {
+        $(".draggable").draggable();
+
+    });
+
+
+</script>
+
+<script type="text/javascript">
+    $("#result").hide();
+
+    let mousex = 0;
+    let mousey = 0;
+    function cordenada_mouse(event) {
+        var x = event.clientX;
+        var y = event.clientY;
+        var coor = "X: " + x + ", Y: " + y;
+
+
+        mousex = x;
+        mousey = y;
+
+
+        if (relacion == 1) {
+            console.log("entro en 1 active animacion");
+            const shortLine = document.getElementById('estandar')
+            shortLine.setAttribute('x2', mousex - 288)
+            shortLine.setAttribute('y2', mousey - 26)
+        }
+
+        document.getElementById("demo").innerHTML = coor;
+    }
+
+    function clearCoor() {
+        document.getElementById("demo").innerHTML = "";
+    }
+    function mirar_div(a) {
+        let id_formt = "#" + a;
+
+        var coordenadas = $(id_formt).position();
+        let r = pila_divs.find(conector => conector.id === a).cordenada = "Y: " + coordenadas.top + " X: " + coordenadas.left
+        r = pila_divs.find(conector => conector.id === a)
+        document.getElementById("informacion").innerHTML = JSON.stringify(pila_divs);
+    }
+    function myFunction(b) {
+        alert("hello, i am " + b + "and my positio is " + mirar_div(b));
+    }
+</script>
+<script>
+
+    function iniciar_entrenamiento() {
+        var valores = $("#epocas").val();
+        $("#val_epoca").text(valores);
+        $("#iniciar").hide();
+        $("#entrenando").show();
+        start();
+        Swal.fire({
+            title: 'Entrenando modelo por favor espere',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        })
+
+        $.ajax({
+            type: "GET",
+            url: "/ia-train",
+            success: function (result) {
+                stop()
+                Loss = result.loss
+                Accuracy = result.accuracy
+                Val_loss = result.val_loss
+                Val_accuracy = result.val_accuracy
+                asignar_resultado(Loss, Accuracy, Val_loss, Val_accuracy)
+                respuesta_imagen = result.files;
+                informacion = result.informacion;
+                $("#ffs").hide()
+                $("#first_img").show()
+
+                $("#confucion").attr("src", result.confu);
+                $("#matrix").attr("src", result.matrix);
+
+
+
+                Swal.fire({
+                    title: 'Entrenamiento a finalizado',
+                    showClass: {
+                        popup: 'animate__animated animate__fadeInDown'
+                    },
+                    hideClass: {
+                        popup: 'animate__animated animate__fadeOutUp'
+                    }
+                })
+
+            }
+        });
+
+    }
+    pantalla = document.getElementById("screen");
+    var isMarch = false;
+    function start() {
+        if (isMarch == false) {
+            timeInicial = new Date();
+            control = setInterval(cronometro, 10);
+            isMarch = true;
+        }
+    }
+    function stop() {
+        if (isMarch == true) {
+            clearInterval(control);
+            isMarch = false;
+        }
+    }
+
+    function asignar_resultado(Loss, Accuracy, Val_loss, Val_accuracy) {
+        $('#Loss').text(Loss)
+        $('#Accuracy').text(Accuracy)
+        $('#Val_loss').text(Val_loss)
+        $('#Val_accuracy').text(Val_accuracy)
+
+    }
+    function cronometro() {
+        timeActual = new Date();
+        acumularTime = timeActual - timeInicial;
+        acumularTime2 = new Date();
+        acumularTime2.setTime(acumularTime);
+        cc = Math.round(acumularTime2.getMilliseconds() / 10);
+        ss = acumularTime2.getSeconds();
+        mm = acumularTime2.getMinutes();
+        hh = acumularTime2.getHours() - 18;
+        if (cc < 10) { cc = "0" + cc; }
+        if (ss < 10) { ss = "0" + ss; }
+        if (mm < 10) { mm = "0" + mm; }
+        if (hh < 10) { hh = "0" + hh; }
+        pantalla.innerHTML = "00" + " : " + mm + " : " + ss + " : " + cc;
+    }
+    function aparecerinfo(a) {
+        desaparecermenus()
+        if (a == 1) {
+            $("#datos").show();
+            $(".menu3").hide();
+        }
+        if (a == 2) {
+            $("#modelo").show();
+            $(".menu3").show();
+
+        }
+        if (a == 3) {
+            $("#hiper").show();
+            $(".menu3").hide();
+        }
+        if (a == 4) {
+            $("#entrenar").show();
+            $(".menu3").hide();
+        }
+        if (a == 5) {
+            $("#resultados").show();
+            $(".menu3").hide();
+        }
+    }
+    function desaparecermenus() {
+        $("#datos").hide();
+        $("#modelo").hide();
+        $("#hiper").hide();
+        $("#entrenar").hide();
+        $("#resultados").hide();
+    }
+
+</script>
+
+</html>
