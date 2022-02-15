@@ -34,10 +34,12 @@ urlpatterns = [
     path('profesional', vista_profesional, name='profesion'),
     path('profesional_registro', registro_profesional, name='profesion_registro'),
     path('profesional_lista', lista_profesionales, name='listar_registro'),
+    path('profesional_eliminar/<int:id>', eliminar_profesional, name='eliminar_registro'),
     path('cambio', cambiar_parametros, name="cambio"),
 
     path('pacientes', vista_paciente, name='paciente'),
     path('paciente_registro', registro_paciente, name='paciente_registro'),
+    path('paciente_eliminar/<int:id>', eliminar_paciente, name='eliminar_pacientes'),
     path('cita_registro', registro_citas, name='cita_registro'),
     path('paciente_lista', lista_paciente, name='listar_paciente'),
     path('cita_lista', lista_citas, name='listar_cita'),
@@ -45,6 +47,8 @@ urlpatterns = [
     path('ia-train', principal_entrenamiento, name='ias'),
     path('cita/<int:id>', analizar, name='show'),
     path('export/', export_pdf, name="export-pdf"),
+    path('actualizar_profesional/<int:id>', update_profesional, name="actualizar_profesional"),
+    path('actualizar_paciente/<int:id>', update_paciente, name="actualizar_paciente"),
     path('imgs/<str:foto>', mostrar_imagen, name='imgs'),
     path('upload', file_upload, name='upload-file'),
 

@@ -33,7 +33,12 @@
                                     <td>{{ profesionales.apellidos}}</td>
                                     <td>{{ profesionales.edad}}</td>
                                     <td>{{ profesionales.telefono}}</td>
-                                    <td><button class="btn btn-primary">Accion</button></td>
+                                    <td>
+                                        <td>
+                                            <button class="btn btn-warning"><a class="text-warning"   href="{% url 'actualizar_paciente' id=profesionales.id %}">Actualizar</a></button>
+                                            <button class="btn btn-danger"><a class="text-danger"   href="{% url 'eliminar_pacientes' id=profesionales.id %}">Eliminar</a></button>
+                                        </td>
+                                    </td>
                                 </tr>
                                 {% endfor%}
                             </tbody>

@@ -35,8 +35,8 @@
                                     <td>{{ profesionales.telefono}}</td>
                                     <td>{{ profesionales.correo}}</td>
                                     <td>
-                                        <button class="btn btn-warning">Actualizar</button>
-                                        <button class="btn btn-danger">Eliminar</button>
+                                        <button class="btn btn-warning"><a class="text-warning"   href="{% url 'actualizar_profesional' id=profesionales.id %}">Actualizar</a></button> 
+                                        <button class="btn btn-danger"><a class="text-danger"   href="{% url 'eliminar_registro' id=profesionales.id %}">Eliminar</a></button>
                                     </td>
                                 </tr>
                                 {% endfor%}

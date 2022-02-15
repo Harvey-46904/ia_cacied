@@ -76,7 +76,53 @@ def lista_profesionales(request):
     }
     return render(request, 'mirar_profesionales.html', contexto)
 
-
+def update_profesional(request,id):
+    if request.method== 'GET':
+        dta= profesional.objects.get(id=id)
+        contexto = {
+            'profesional': dta
+        }
+        return render(request, 'actualizar_profesional.html', contexto)
+    else:
+        data=profesional.objects.get(id=id) 
+        data.tipo_documento=request.POST.get("tipo_documento")
+        data.no_documento=request.POST.get("no_documento")
+        data.nombres=request.POST.get("nombres")
+        data.apellidos=request.POST.get("apellidos")
+        data.edad=request.POST.get("edad")
+        data.telefono=request.POST.get("telefono")
+        data.correo=request.POST.get("correo")
+        data.contraseña=request.POST.get("contraseña")
+        data.save()
+        dta= profesional.objects.all()
+        contexto = {
+            'profesional': dta
+        }
+        return render(request, 'mirar_profesionales.html', contexto)
+def update_paciente(request,id):
+    if request.method == 'GET':
+        data= Paciente.objects.get(id=id)
+        contexto={
+            'paciente':data
+        }
+        return render(request, 'actualizar_paciente.html',contexto)
+    else:
+        data=Paciente.objects.get(id=id) 
+        data.tipo_documento=request.POST.get("tipo_documento")
+        data.nombres=request.POST.get("nombres")
+        data.apellidos=request.POST.get("apellidos")
+        data.edad=request.POST.get("edad")
+        data.telefono=request.POST.get("telefono")
+        data.no_documento=request.POST.get("no_documento")
+        
+        data.save()
+        dta=Paciente.objects.all() 
+        contexto = {
+        'profesional': dta
+        }
+        return render(request, 'mirar_paciente.html', contexto)
+       
+   
 def registro_profesional(request):
     if request.method == 'GET':
         form = PersonaForm()
@@ -959,8 +1005,24 @@ def nuevo_img_color(ruta):
     return (mas,ther)
 
     
+def eliminar_profesional(request , id):
+    pro= profesional.objects.get(id=id)
+    pro.delete()
+    dta= profesional.objects.all()
+    contexto = {
+        'profesional': dta
+    }
+    return render(request, 'mirar_profesionales.html', contexto)
 
 
+def eliminar_paciente(request,id):
+    persona = Paciente.objects.get(id=id)
+    persona.delete()
+    dta=Paciente.objects.all() 
+    contexto = {
+        'profesional': dta
+    }
+    return render(request, 'mirar_paciente.html', contexto)
 def analizar(request, id):
     global pdfs
     persona = Paciente.objects.get(id=id)
