@@ -1023,11 +1023,13 @@ def eliminar_paciente(request,id):
         'profesional': dta
     }
     return render(request, 'mirar_paciente.html', contexto)
+
+    
 def analizar(request, id):
     global pdfs
     persona = Paciente.objects.get(id=id)
 
-    resonancia = Cita.objects.get(id=persona.id)
+    resonancia = Cita.objects.get(id_paciente_id=persona.id)
     profesiona = profesional.objects.get(id=resonancia.id_profesional_id)
     url = "./"+resonancia.resonancia.url
     (mas,ther)=nuevo_img_color(url)
