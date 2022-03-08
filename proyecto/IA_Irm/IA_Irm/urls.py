@@ -50,6 +50,7 @@ urlpatterns = [
     path('actualizar_profesional/<int:id>', update_profesional, name="actualizar_profesional"),
     path('actualizar_paciente/<int:id>', update_paciente, name="actualizar_paciente"),
     path('imgs/<str:foto>', mostrar_imagen, name='imgs'),
+    path('roc', carga_modelo_roc, name='roc'),
     path('upload', file_upload, name='upload-file'),
 
 
