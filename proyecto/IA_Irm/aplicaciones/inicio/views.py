@@ -48,9 +48,9 @@ import urllib
 import base64
 
 from django.http import HttpResponse, JsonResponse
-from sklearn.datasets import make_classification  
-from sklearn.preprocessing import label_binarize  
-from scipy import interp  
+from sklearn.datasets import make_classification
+from sklearn.preprocessing import label_binarize
+from scipy import interp
 from itertools import cycle
 from sklearn.metrics import roc_curve, auc
 
@@ -80,53 +80,56 @@ def lista_profesionales(request):
     }
     return render(request, 'mirar_profesionales.html', contexto)
 
-def update_profesional(request,id):
-    if request.method== 'GET':
-        dta= profesional.objects.get(id=id)
+
+def update_profesional(request, id):
+    if request.method == 'GET':
+        dta = profesional.objects.get(id=id)
         contexto = {
             'profesional': dta
         }
         return render(request, 'actualizar_profesional.html', contexto)
     else:
-        data=profesional.objects.get(id=id) 
-        data.tipo_documento=request.POST.get("tipo_documento")
-        data.no_documento=request.POST.get("no_documento")
-        data.nombres=request.POST.get("nombres")
-        data.apellidos=request.POST.get("apellidos")
-        data.edad=request.POST.get("edad")
-        data.telefono=request.POST.get("telefono")
-        data.correo=request.POST.get("correo")
-        data.contraseña=request.POST.get("contraseña")
+        data = profesional.objects.get(id=id)
+        data.tipo_documento = request.POST.get("tipo_documento")
+        data.no_documento = request.POST.get("no_documento")
+        data.nombres = request.POST.get("nombres")
+        data.apellidos = request.POST.get("apellidos")
+        data.edad = request.POST.get("edad")
+        data.telefono = request.POST.get("telefono")
+        data.correo = request.POST.get("correo")
+        data.contraseña = request.POST.get("contraseña")
         data.save()
-        dta= profesional.objects.all()
+        dta = profesional.objects.all()
         contexto = {
             'profesional': dta
         }
         return render(request, 'mirar_profesionales.html', contexto)
-def update_paciente(request,id):
+
+
+def update_paciente(request, id):
     if request.method == 'GET':
-        data= Paciente.objects.get(id=id)
-        contexto={
-            'paciente':data
-        }
-        return render(request, 'actualizar_paciente.html',contexto)
-    else:
-        data=Paciente.objects.get(id=id) 
-        data.tipo_documento=request.POST.get("tipo_documento")
-        data.nombres=request.POST.get("nombres")
-        data.apellidos=request.POST.get("apellidos")
-        data.edad=request.POST.get("edad")
-        data.telefono=request.POST.get("telefono")
-        data.no_documento=request.POST.get("no_documento")
-        
-        data.save()
-        dta=Paciente.objects.all() 
+        data = Paciente.objects.get(id=id)
         contexto = {
-        'profesional': dta
+            'paciente': data
+        }
+        return render(request, 'actualizar_paciente.html', contexto)
+    else:
+        data = Paciente.objects.get(id=id)
+        data.tipo_documento = request.POST.get("tipo_documento")
+        data.nombres = request.POST.get("nombres")
+        data.apellidos = request.POST.get("apellidos")
+        data.edad = request.POST.get("edad")
+        data.telefono = request.POST.get("telefono")
+        data.no_documento = request.POST.get("no_documento")
+
+        data.save()
+        dta = Paciente.objects.all()
+        contexto = {
+            'profesional': dta
         }
         return render(request, 'mirar_paciente.html', contexto)
-       
-   
+
+
 def registro_profesional(request):
     if request.method == 'GET':
         form = PersonaForm()
@@ -224,63 +227,64 @@ llama al archivo .h5 que se genero en el entrenamiento y este lo guarda
 para obtener parametros segun la imagen de entreda 
 '''
 
+
 def carga_modelo_roc():
     pred = model.predict(X_test)
-    p=pred
+    p = pred
     snn_pred = p
-    snn_predicted = np.argmax(snn_pred, axis=1)  
-    n_classes =4
+    snn_predicted = np.argmax(snn_pred, axis=1)
+    n_classes = 4
     # Trazar ancho de línea.
     lw = 2
     # Compute ROC curve and ROC area for each class
-    fpr = dict()  
-    tpr = dict()  
-    roc_auc = dict()  
-    for i in range(n_classes):  
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    for i in range(n_classes):
         fpr[i], tpr[i], _ = roc_curve(y_test[:, i], snn_pred[:, i])
         roc_auc[i] = auc(fpr[i], tpr[i])
     # Calcule la curva ROC del micropromedio y el área ROC
-    fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), snn_pred.ravel())  
+    fpr["micro"], tpr["micro"], _ = roc_curve(y_test.ravel(), snn_pred.ravel())
     roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
     # Compute macro-average ROC curve and ROC area
     # Primero se agregua todas las tasas de falsos positivos
     all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
     # Luego interpola todas las curvas ROC en estos puntos
-    mean_tpr = np.zeros_like(all_fpr)  
-    for i in range(n_classes):  
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(n_classes):
         mean_tpr += interp(all_fpr, fpr[i], tpr[i])
     mean_tpr /= n_classes
-    fpr["macro"] = all_fpr  
-    tpr["macro"] = mean_tpr  
+    fpr["macro"] = all_fpr
+    tpr["macro"] = mean_tpr
     roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
     # Trazar todas las curvas ROC
     # Ampliar la vista de la esquina superior izquierda..
-    plt.figure(4)  
-    plt.xlim(0, 0.2)  
-    plt.ylim(0.8, 1)  
-    plt.plot(fpr["micro"], tpr["micro"],  
-            label='micro-average ROC curve (area = {0:0.2f})'
-                ''.format(roc_auc["micro"]),
-            color='deeppink', linestyle=':', linewidth=4)
+    plt.figure(4)
+    plt.xlim(0, 0.2)
+    plt.ylim(0.8, 1)
+    plt.plot(fpr["micro"], tpr["micro"],
+             label='micro-average ROC curve (area = {0:0.2f})'
+             ''.format(roc_auc["micro"]),
+             color='deeppink', linestyle=':', linewidth=4)
 
-    plt.plot(fpr["macro"], tpr["macro"],  
-            label='macro-average ROC curve (area = {0:0.2f})'
-                ''.format(roc_auc["macro"]),
-            color='navy', linestyle=':', linewidth=4)
+    plt.plot(fpr["macro"], tpr["macro"],
+             label='macro-average ROC curve (area = {0:0.2f})'
+             ''.format(roc_auc["macro"]),
+             color='navy', linestyle=':', linewidth=4)
 
-    colors = cycle(['aqua', 'darkorange', 'cornflowerblue','black'])  
-    for i, color in zip(range(4), colors):  
+    colors = cycle(['aqua', 'darkorange', 'cornflowerblue', 'black'])
+    for i, color in zip(range(4), colors):
         plt.plot(fpr[i], tpr[i], color=color, lw=lw,
-                label='ROC curve of class {0} (area = {1:0.2f})'
-                ''.format(i, roc_auc[i]))
+                 label='ROC curve of class {0} (area = {1:0.2f})'
+                 ''.format(i, roc_auc[i]))
 
-    plt.plot([0, 1], [0, 1], 'k--', lw=lw)  
-    plt.xlim([0.0, 1.0])  
-    plt.ylim([0.0, 1.05]) 
-    plt.xlabel('Tasa de falsos positivos')  
-    plt.ylabel('Tasa de verdaderos positivos')  
-    plt.title('Receptor de multiclase en todas las etiquetas')  
-    plt.legend(loc="lower right")  
+    plt.plot([0, 1], [0, 1], 'k--', lw=lw)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('Tasa de falsos positivos')
+    plt.ylabel('Tasa de verdaderos positivos')
+    plt.title('Receptor de multiclase en todas las etiquetas')
+    plt.legend(loc="lower right")
     buf = io.BytesIO()
     plt.savefig(buf,  format='png')
     buf.seek(0)
@@ -447,7 +451,7 @@ def pruebas(request):
         ax = plt.subplot(4, 4, i + 1)
         img = mpimg.imread(path + fileNames[i])
         img = cv2.resize(img, (h, w))
-       
+
         plt.title(fileLabels[i])
         plt.axis("off")
 
@@ -576,7 +580,7 @@ def entrenar(train_imagen, y_train_one_hot, x_test_one_hot):
 def mensaje(request):
     index = 12
     (train_imagen, train_label, test_imagen, test_label) = cargar_imagenes()
-    
+
     plt.title("figura")
     fig = plt.gcf()
     buf = io.BytesIO()
@@ -703,7 +707,7 @@ def muestreo_imagenes():
         j = 0
         while True:
             if y_train[j] == i:
-               
+
                 ax[k].set_title(y_train[j])
                 ax[k].axis('off')
                 k += 1
@@ -1016,7 +1020,6 @@ def plot_heatmaps(rng, input_image, img, resnet_50):
     plt.figure(figsize=(15, 15))
     plt.axis('off')
 
-   
     return plt
 
 
@@ -1051,9 +1054,10 @@ def mostrar_imagen(request, foto):
 def nuevo_img_color(ruta):
     image = cv2.imread(ruta)
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
-    x,y,w,h = cv2.boundingRect(thresh)
-    ROI = image[y:y+h, x:x+w]    
+    thresh = cv2.threshold(
+        gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+    x, y, w, h = cv2.boundingRect(thresh)
+    ROI = image[y:y+h, x:x+w]
     hsv = cv2.cvtColor(ROI, cv2.COLOR_BGR2HSV)
     lower = np.array([0, 0, 152])
     upper = np.array([179, 255, 255])
@@ -1065,40 +1069,41 @@ def nuevo_img_color(ruta):
     right_pixels = cv2.countNonZero(right)
     print('Left pixels:', left_pixels)
     print('Right pixels:', right_pixels)
-    retval, buffer_img= cv2.imencode('.png', mask)
+    retval, buffer_img = cv2.imencode('.png', mask)
     base64_img = base64.b64encode(buffer_img).decode("utf-8")
 
-    retval1, buffer_img1= cv2.imencode('.png', thresh)
+    retval1, buffer_img1 = cv2.imencode('.png', thresh)
     base64_img1 = base64.b64encode(buffer_img1).decode("utf-8")
-    mas="data:image/png;base64,"+base64_img
-    ther="data:image/png;base64,"+base64_img1
-    return (mas,ther)
+    mas = "data:image/png;base64,"+base64_img
+    ther = "data:image/png;base64,"+base64_img1
 
-    
-def eliminar_profesional(request , id):
-    pro= profesional.objects.get(id=id)
+    return (mas, ther)
+
+
+def eliminar_profesional(request, id):
+    pro = profesional.objects.get(id=id)
     pro.delete()
-    dta= profesional.objects.all()
+    dta = profesional.objects.all()
     contexto = {
         'profesional': dta
     }
     return render(request, 'mirar_profesionales.html', contexto)
 
 
-def eliminar_paciente(request,id):
+def eliminar_paciente(request, id):
     persona = Paciente.objects.get(id=id)
     persona.delete()
-    dta=Paciente.objects.all() 
+    dta = Paciente.objects.all()
     contexto = {
         'profesional': dta
     }
     return render(request, 'mirar_paciente.html', contexto)
 
-def nuevo_segmentacion(ruta):
-    te = TumorExtractor(ruta,512,512)
-    assd=te.extract_tumor()
-    return assd
 
+def nuevo_segmentacion(ruta):
+    te = TumorExtractor(ruta, 512, 512)
+    assd = te.extract_tumor()
+    return assd
 
 
 def analizar(request, id):
@@ -1108,11 +1113,11 @@ def analizar(request, id):
     resonancia = Cita.objects.get(id_paciente_id=persona.id)
     profesiona = profesional.objects.get(id=resonancia.id_profesional_id)
     url = "./"+resonancia.resonancia.url
-    (mas,ther)=nuevo_img_color(url)
+    (mas, ther) = nuevo_img_color(url)
     prediccion = cargar_modelo(url)
-    img_nueva=nuevo_segmentacion(url)
-    if(img_nueva==None):
-        img_nueva=resonancia.resonancia.url
+    img_nueva = nuevo_segmentacion(url)
+    if(img_nueva == None):
+        img_nueva = resonancia.resonancia.url
     #uri = mostrar_imagen(request, url)
     now = datetime.now()
     '''image = cStringIO.StringIO(urllib.urlopen(url).read())
@@ -1131,9 +1136,9 @@ def analizar(request, id):
         'resonancia': resonancia,
         'persona': profesiona,
         'fecha': now,
-        'mask':mas,
-        'ther':img_nueva,
-        'prediccion':prediccion
+        'mask': mas,
+        'ther': img_nueva,
+        'prediccion': prediccion
         # 'prediccion': prediccion
     }
     pdfs = contexto
@@ -1167,13 +1172,13 @@ def file_upload(request):
     return JsonResponse({'post': 'false'})
 
 
-
 class TumorExtractor():
-    tipo_base64= None
+    tipo_base64 = None
 #     ("Y1.JPG",600,400)
-    def __init__(self,img_file,width,height):
-        self.img = cv2.resize(cv2.imread(img_file,0),(width,height))
-        
+
+    def __init__(self, img_file, width, height):
+        self.img = cv2.resize(cv2.imread(img_file, 0), (width, height))
+
     def test_img(self):
 
         #cv2.imshow('Windows1', self.img)
@@ -1182,77 +1187,81 @@ class TumorExtractor():
         except KeyboardInterrupt as e:
             print(e)
         cv2.destroyWindow('Windows1')
-        
+
     def verify_image(self, tum):
         global tipo_base64
-        #cv2.imshow(tum)
-        _, im_arr = cv2.imencode('.jpg', tum)  # im_arr: image in Numpy one-dim array format.
+        # cv2.imshow(tum)
+        # im_arr: image in Numpy one-dim array format.
+        _, im_arr = cv2.imencode('.jpg', tum)
         im_bytes = im_arr.tobytes()
         im_b64 = base64.b64encode(im_bytes)
-        tipo_base64="data:image/png;base64,"+str(im_b64.decode())
+        tipo_base64 = "data:image/png;base64,"+str(im_b64.decode())
         try:
             cv2.waitKey()
         except KeyboardInterrupt as e:
             print(e)
-       
-        
-    def extract_brain(self,ero_itr=5,dil_itr=5):
+
+    def extract_brain(self, ero_itr=5, dil_itr=5):
         # remove all the noise from the image
         #eg:- salt and pepper
-        kernel1 = np.ones((5,5),np.float32)/25
-        dst1 = cv2.filter2D(self.img,-1,kernel1)
+        kernel1 = np.ones((5, 5), np.float32)/25
+        dst1 = cv2.filter2D(self.img, -1, kernel1)
         self.verify_image(dst1)
 
-        #threshold the image to genrate filter
-        ret2,th2 = cv2.threshold(dst1,45,255,cv2.THRESH_BINARY+cv2.THRESH_OTSU)
+        # threshold the image to genrate filter
+        ret2, th2 = cv2.threshold(
+            dst1, 45, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU)
         self.verify_image(th2)
-        
-        #erosion of image to remove irregular shape and noise
-        kernel3 = np.ones((5,5), np.uint8) 
+
+        # erosion of image to remove irregular shape and noise
+        kernel3 = np.ones((5, 5), np.uint8)
         img_erosion = cv2.erode(th2, kernel3, iterations=ero_itr)
         self.verify_image(img_erosion)
-        
-        #dilation of image to maximize the region of interest
+
+        # dilation of image to maximize the region of interest
         img_dilation = cv2.dilate(img_erosion, kernel3, iterations=dil_itr)
         self.verify_image(img_dilation)
-        
-        contours,hierarchy = cv2.findContours(img_dilation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+        contours, hierarchy = cv2.findContours(
+            img_dilation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
         if len(contours) != 0:
-            c = max(contours, key = cv2.contourArea)
-            x,y,w,h = cv2.boundingRect(c)
-            new_img = self.img[y:y+h,x:x+w]
-            
+            c = max(contours, key=cv2.contourArea)
+            x, y, w, h = cv2.boundingRect(c)
+            new_img = self.img[y:y+h, x:x+w]
+
         return new_img
-    
+
     def extract_tumor(self):
         global tipo_base64
-        #extract brain from the image
+        # extract brain from the image
         new_img = self.extract_brain()
-        #self.verify_image(new_img)
-        
-        #apply the medium filter to smooth image and remove the noise
+        # self.verify_image(new_img)
+
+        # apply the medium filter to smooth image and remove the noise
         median_filter = cv2.medianBlur(new_img, 5)
-        #self.verify_image(median_filter)
-        
-        #apply erosion and dilation
-        kernel=cv2.getStructuringElement(cv2.MORPH_RECT,(9,9))
+        # self.verify_image(median_filter)
+
+        # apply erosion and dilation
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (9, 9))
         erosion = cv2.morphologyEx(median_filter, cv2.MORPH_ERODE, kernel)
         dilation = cv2.morphologyEx(erosion, cv2.MORPH_DILATE, kernel)
-        
-        #applying thresholding on the image to extract the tumor part from the image
-        ret3,th3 = cv2.threshold(dilation,160,255,cv2.THRESH_BINARY)
-        #self.verify_image(th3)
-        
-        #apply contour filter and extract the largest contour part
-        contours,hierarchy = cv2.findContours(th3, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+
+        # applying thresholding on the image to extract the tumor part from the image
+        ret3, th3 = cv2.threshold(dilation, 160, 255, cv2.THRESH_BINARY)
+        # self.verify_image(th3)
+
+        # apply contour filter and extract the largest contour part
+        contours, hierarchy = cv2.findContours(
+            th3, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
         if len(contours) != 0:
-            c = max(contours, key = cv2.contourArea)
-            x,y,w,h = cv2.boundingRect(c)
-            tumor = new_img[y:y+h,x:x+w]
+            c = max(contours, key=cv2.contourArea)
+            x, y, w, h = cv2.boundingRect(c)
+            tumor = new_img[y:y+h, x:x+w]
             self.verify_image(tumor)
             color = (14, 157, 87)
-            new_img = cv2.rectangle(new_img, (x, y), (x + w, y + h), color,5)
-            cv2.putText(new_img, 'P.T', (x, y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255,255,255), 2)
+            new_img = cv2.rectangle(new_img, (x, y), (x + w, y + h), color, 5)
+            cv2.putText(new_img, 'P.T', (x, y-10),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
             self.verify_image(new_img)
             return tipo_base64

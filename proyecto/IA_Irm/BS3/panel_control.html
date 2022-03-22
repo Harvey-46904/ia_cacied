@@ -144,14 +144,14 @@
 
                         <ul class="nav navbar-nav navbar-right">
                             <li>
-                                <a href="">
+                                <a href="#">
                                     <p>Cuenta</p>
                                 </a>
                             </li>
 
                             <li>
                                 <a href="#">
-                                    <p>Log out</p>
+                                    <p>Cerrar</p>
                                 </a>
                             </li>
                             <li class="separator hidden-lg"></li>
@@ -174,11 +174,11 @@
             </div>
             <div class="content bg-canvas  " ondragover="evdragover(event)" ondrop="evdrop(event,this)" id="datos">
 
-                <div class=" bg-puro   center-block text-center ">
+                <div class=" bg-puro  center-block text-center ">
                     <h3 class="mb-5 text-center"><b>Formulario de carga de datos</b></h3>
-                    <!-- 
 
 
+                    <!--
                     <form enctype="multipart/form-data" id="imageForm" class="text-center flex ">
                         {% csrf_token %}
 
@@ -209,7 +209,17 @@
                     <br>
                     <button type="submit" class="btn btn-primary  " onclick="eliminar_imagenes()">Agregar Nuevas
                         Imagenes</button>
+
+                    <!-- Button trigger modal -->
+                    <div style="text-align: right;">
+
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalDatos">
+                            <img src="https://cdn.icon-icons.com/icons2/91/PNG/512/help_16439.png" alt="icono_ayuda"
+                                style="height: 25px; width: 25px;" </button>
+                    </div>
                 </div>
+
+
 
             </div>
             <div style="display: none;" class="content bg-canvas" id="modelo">
@@ -231,12 +241,18 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Button trigger modal -->
+                    <div style="text-align: right;">
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalModelo">
+                            <img src="https://cdn.icon-icons.com/icons2/91/PNG/512/help_16439.png" alt="icono_ayuda"
+                                style="height: 25px; width: 25px;" </button>
+                    </div>
                 </div>
             </div>
             <div style="display: none;" class="content bg-canvas" ondragover="evdragover(event)"
                 ondrop="evdrop(event,this)" id="hiper">
                 <div class=" bg-puro   center-block text-center ">
-                    <h3 class="mb-5 text-center"><b>Formulario Hiper Parametros</b></h3>
+                    <h3 class="mb-5 text-center"><b>Hiperparámetros</b></h3>
                     <form id="hipersp">
                         {% csrf_token %}
 
@@ -253,23 +269,20 @@
                         <div class="form-group">
                             <label for="exampleFormControlSelect1">
                                 función de pérdida</label>
-                            <select class="form-control" id="perdida" name="perdida">
+                            <select class="form-control" id="perdida" name="perdida" disabled>
                                 <option>categorical_crossentropy</option>
-                                <option>binary_crossentropy</option>
-                                <option>sparse_categorical_crossentropy</option>
-                                <option>poisson</option>
+                                <option hidden>binary_crossentropy</option>
+                                <option hidden>sparse_categorical_crossentropy</option>
+                                <option hidden>poisson</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="exampleFormControlSelect1">
-
-                                optimizador</label>
-                            <select class="form-control" id="optimizar" name="optimizar">
+                            <label for="exampleFormControlSelect1">optimizador</label>
+                            <select class="form-control" id="optimizar" name="optimizar" disabled>
                                 <option>Adam</option>
-                                <option>Adadelta</option>
-                                <option>Adagrad</option>
-                                <option>Adamax</option>
-
+                                <option hidden>Adadelta</option>
+                                <option hidden>Adagrad</option>
+                                <option hidden>Adamax</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -279,9 +292,14 @@
                         </div>
                         <button type="button" class="btn btn-primary" onclick="guardar_parametro()">Guardar
                             Cambios</button>
-
-
                     </form>
+                    <!-- Button trigger modal -->
+                    <div style="text-align: right;">
+                        <button type="button" class="btn btn-warning" data-toggle="modal"
+                            data-target="#modalHiperparametros">
+                            <img src="https://cdn.icon-icons.com/icons2/91/PNG/512/help_16439.png" alt="icono_ayuda"
+                                style="height: 25px; width: 25px;" </button>
+                    </div>
                 </div>
             </div>
             <div class="content bg-canvas" style="display: none;" ondragover="evdragover(event)"
@@ -293,6 +311,13 @@
                             <div class=" text-center col-md-12">
                                 <button type="button" class="btn btn-danger"
                                     onclick="iniciar_entrenamiento()">Iniciar</button>
+                            </div>
+                            <!-- Button trigger modal -->
+                            <div style="text-align: right;">
+                                <button type="button" class="btn btn-warning" data-toggle="modal"
+                                    data-target="#modalEntrenamiento">
+                                    <img src="https://cdn.icon-icons.com/icons2/91/PNG/512/help_16439.png"
+                                        alt="icono_ayuda" style="height: 25px; width: 25px;" </button>
                             </div>
                         </div>
                     </div>
@@ -369,8 +394,7 @@
             </div>
 
             <footer class="footer" style="
-            border-top-width: 0px;
-        ">
+            border-top-width: 0px;">
                 <div class="container-fluid bg-canvas">
                     <nav class="pull-left">
                         <ul>
@@ -386,9 +410,201 @@
     </div>
 
 
-    <!-- Modal s-->
+    <!-- Modales-->
 
+    <!-- Modal Cargue de Datos -->
+    <div class="modal fade" id="modalDatos" tabindex="-1" role="dialog" aria-labelledby="modalDatosLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cargue de imágenes</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger" role="alert">
+                        <strong>Señor usuario:</strong> <br>
+                        Tenga en cuenta que el sistema no es capaz de verificar si las imágenes que usted esta cargando,
+                        corresponden o no a la etiqueta seleccionada. Por ende, se recomienda verificar que las imagenes
+                        a cargar, correspondan a la etiqueta. De no ser asi, el modelo podria arrojar detecciones nulas,
+                        corrompiendo así la funcionalidad de <strong>DIRMIA</strong>.
+                    </div>
 
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/rk8EJDrTkrw?rel=0"
+                            allowfullscreen></iframe>
+                    </div>
+
+                    <p class="bg-info">
+                        Puede cargar imagenes utilizando la función <strong>Arrastrar y soltar</strong> como lo
+                        muestra el video ubicado en la parte superior.
+                    </p>
+
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/jSMZB3uGEmM?rel=0"
+                            allowfullscreen></iframe>
+                    </div>
+                    <p class="bg-info">
+                        Puede también cargar imagenes haciendo <strong>click</strong> en el apartado <strong>Arrastre
+                            archivos para cargar</strong> como lo muestra el video ubicado en la parte superior.
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Modelo -->
+    <div class="modal fade" id="modalModelo" tabindex="-1" role="dialog" aria-labelledby="modalModeloLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modelo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/aIEu7S0D4_s?rel=0"
+                            allowfullscreen></iframe>
+                    </div>
+
+                    <p class="bg-info">
+                        Para cargar el modelo, debe hacer uso de la funcionalidad <strong>Arrastrar y soltar</strong>,
+                        tome el modelo y lo arrastra hazta el cuadro <strong>Arrastre el modelo aquí</strong>. <br>
+                        Puede eliminar el modelo haciendo <strong>click</strong> en el cuadro rojo con la letra
+                        <strong>D</strong>, o bien puede hacer <strong>click</strong> en el cuadro verde con la letra
+                        <strong>E</strong> y se desplegara las capas del modelo <strong>EFFICENTNETB0</strong>. Como lo
+                        muestra el video ubicado en la parte superior.
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Hiperparametros-->
+    <div class="modal fade" id="modalHiperparametros" tabindex="-1" role="dialog"
+        aria-labelledby="modalHiperparametrosLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Hiperparámetros</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Señor usuario:</strong> <br>
+                        En la parte inferior, hay una descripción breve de lo que hace cada parámetro.
+                        Si la información suministrada no es suficiente, puede dar click a los enlaces
+                        de cada descripción para obtener mas información.
+                    </div>
+
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/Yd-k_ZLGKjQ?rel=0"
+                            allowfullscreen></iframe>
+                    </div>
+
+                    <p class="bg-info">
+                        <strong>- Número de epocas: </strong>
+                        Este parametro se puede definir como la separacion de los datos de
+                        entrenamiento en lotes más pequeños durante el mismo, entre
+                        mas epocas se espera resultados mas confiables. <br>
+                        <strong>- Tamaño del lote: </strong>
+                        Es la cantidad de muestras que toma del conjunto de datos de entrenamiento
+                        para entrenar la red. <br>
+                        <strong>Ejemplo: </strong>
+                        Si ponemos 32 como tamaño de lote, nuestro modelo va a tomar las primeras 32 imagenes
+                        para entrenar la red y una vez termine con este lote toma las siguientes 32 imagenes
+                        hasta terminar con el total del lote. <br>
+                        <strong>- Función de pérdida: </strong>
+                        Es una función que evalúa la desviación entre las predicciones
+                        realizadas por la red neuronal y los valores reales de las
+                        observaciones utilizadas durante el aprendizaje. Cuanto menor
+                        es el resultado de esta función, más eficiente es la red neuronal.
+                        CategoricalCrossentropy se utiliza cuando existen dos o más clases de etiquetas. <br>
+                        <strong>- Optimizador: </strong>
+                        Es un algoritmo de optimización de aprendizaje automático iterativo para reducir la función
+                        de costo. Esto ayudará a los modelos a realizar predicciones precisas.
+                        El degradado indica la dirección de aumento. Como se quiere
+                        encontrar el punto mínimo en el valle, se necesita ir en la
+                        dirección opuesta a la pendiente para ello se actualizan los parámetros
+                        en la dirección del gradiente negativo para minimizar la pérdida.
+                        La funcion Adam, que es una extensión del descenso de gradiente estocástico
+                        habitualmente se utiliza para aplicaciones de aprendizaje profundo en visión por computadora
+                        y procesamiento de lenguaje natural. <br>
+                        <strong>- División de validación</strong>
+                        Es un valor que osila entre 0 y 1 y su funcion es apartar la fracción
+                        de datos seleccionados, la cual no se va a entrenar junto con el modelo
+                        si no que, estos datos seran utilizados para validar la perdida y cualquier
+                        metrica del modelo al final de cada epoca.
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Entrenamiento -->
+    <div class="modal fade" id="modalEntrenamiento" tabindex="-1" role="dialog"
+        aria-labelledby="modalEntrenamientoLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Entrenamiento</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/07YAQT_BWqA?rel=0"
+                            allowfullscreen></iframe>
+                    </div>
+
+                    <p class="bg-info">
+                        Solo basta con presionar el botón <strong>Iniciar</strong> para que el modelo empiece a
+                        entrenarse. <br>
+                        En el panel de entranamiento, se muestran diferentes etiquetas con información relevante,
+                        a continuación explicamos cada una de ellas: <br>
+                        <strong>- Épocas: </strong>
+                        Número establecido en los hiperparámetros. <br>
+                        <strong>- Tiempo: </strong>
+                        Cronómetro del tiempo transcurrido desde que se empezo a entrenar el modelo, se dentendra cuando
+                        el proceso de entrenamiento haya terminado. <br>
+                        <strong>- Loss: </strong>
+                        Es el valor de la función de costo para sus datos de entrenamiento. <br>
+                        <strong>- Val_loss: </strong>
+                        Es el valor de la función de costo para sus datos de validación cruzada. <br>
+                        <strong>- Val_accuracy: </strong>
+                        Es la precisión calculada en el conjunto de validación (datos que el modelo nunca ha "visto").
+                        <br>
+                        <strong>- Accuracy: </strong>
+                        Mide el porcentaje de casos que el modelo ha acertado.
+                    </p>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
@@ -457,7 +673,7 @@
     };
 
     function mensaje() {
-        console.log("prewparando carga");
+        console.log("preparando carga");
         var forms = $('#carga_imagenes').serializeArray()
         var forms = document.getElementById("imageForm")
         console.log(forms);
