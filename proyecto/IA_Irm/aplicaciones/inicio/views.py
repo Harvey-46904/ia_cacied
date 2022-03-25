@@ -672,7 +672,8 @@ def convertir_imagenes():
     global y_train
     for i in labels:
         folderPath = os.path.join(
-            './static/input/brain-tumor-classification-mri', 'Training', i)
+            #cambiamos la ruta para entrenar se conserva la ruta de testing
+            './', 'media', i)
         for j in tqdm(os.listdir(folderPath)):
             img = cv2.imread(os.path.join(folderPath, j))
             img = cv2.resize(img, (image_size, image_size))
@@ -830,7 +831,7 @@ def preparar_modelo():
                   optimizer='Adam', metrics=['accuracy'])
     tensorboard = TensorBoard(log_dir='logs')
     checkpoint = ModelCheckpoint(
-        "effnet.h5", monitor="val_accuracy", save_best_only=True, mode="auto", verbose=1)
+        "model.h5", monitor="val_accuracy", save_best_only=True, mode="auto", verbose=1)
     reduce_lr = ReduceLROnPlateau(monitor='val_accuracy', factor=0.3, patience=2, min_delta=0.001,
                                   mode='auto', verbose=1)
     return (tensorboard, checkpoint, reduce_lr)
